@@ -1,5 +1,5 @@
 # Bad Apple JS
-Because why not?
+Because why not? Plays Bad Apple inside your terminal.
 
 # Prerequisites
 You must have FFmpeg installed and have it set in your path.
