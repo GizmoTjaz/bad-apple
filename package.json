@@ -1,0 +1,23 @@
+{
+  "name": "bad-apple",
+  "version": "1.0.0",
+  "description": "Because why not?",
+  "scripts": {
+    "download": "node src/download_video.js && node --expose-gc src/convert_to_ascii.js",
+    "play": "node src/play.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GizmoTjaz/bad-apple.git"
+  },
+  "author": "GizmoTjaz",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/GizmoTjaz/bad-apple/issues"
+  },
+  "homepage": "https://github.com/GizmoTjaz/bad-apple#readme",
+  "dependencies": {
+    "sharp": "^0.27.1",
+    "ytdl-core": "^4.4.5"
+  }
+}
