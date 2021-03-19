@@ -34,7 +34,8 @@ video.on("end", () => {
 
     const proc = spawn("ffmpeg", [
         "-i", path.join(tempPath, "out.mp4"),
-        path.join(framePath, "/%03d.png")
+        path.join(framePath, "/%03d.png"),
+        "-preset", "ultrafast"
     ], {
         shell: true
     });
@@ -42,8 +43,6 @@ video.on("end", () => {
     // For some reason it outputs data to stderr...
     proc.stderr.on("data", data => {
         console.log("\033[F" + `[${ loadingBuffer() }] Splitting Frames...`);
-        
-        
     });
 
     proc.on("close", exitCode => {
