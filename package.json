@@ -1,0 +1,29 @@
+{
+  "name": "bad-apple",
+  "version": "1.0.0",
+  "description": "Because why not?",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:w": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GizmoTjaz/bad-apple.git"
+  },
+  "author": "GizmoTjaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GizmoTjaz/bad-apple/issues"
+  },
+  "homepage": "https://github.com/GizmoTjaz/bad-apple#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "@types/sharp": "^0.28.0",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "sharp": "^0.28.1",
+    "ytdl-core": "^4.5.0"
+  }
+}
