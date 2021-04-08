@@ -7,7 +7,7 @@ import { RawFrame } from "@typings/types";
 type ErrCallback = Error | number;
 
 export default function (videoPath: string, frameCallback: (frame: RawFrame) => void): Promise<void> {
-	return new Promise((res: () => void, rej: (err: any) => void) => {
+	return new Promise((res: () => void, rej: (err: ErrCallback) => void) => {
 
 		const ffmpegProcess = spawn("ffmpeg", [
 			"-i", videoPath,
