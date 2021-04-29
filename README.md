@@ -2,7 +2,7 @@
     <img src ="https://user-images.githubusercontent.com/25076630/107957733-51ef7f00-6fa1-11eb-8a06-13376a242c6a.gif" width="144" style="text-align: cener;">
 </p>
 
-<h1 align="center">BadAppleJS</h1>
+<h1 align="center">Bad Apple</h1>
 Plays Bad Apple inside your terminal, because why not?
 <br></br>
 
@@ -11,17 +11,12 @@ You must have FFmpeg installed and have it set in your path.
 
 # Getting Started
 
-Make sure to install the needed modules by running the following command first:
+Make sure to globally install the module
 ```
-npm i
-```
-
-Before playing, you must download and convert the video by running the download command. It may take some time depending on your CPU but it only has to be done once.
-```
-npm run download
+npm i -g bad-apple
 ```
 
-After it finishes,  you can run the following command:
+After it is installed, play it with one command. You will be prompted to download the video if this is your first time.
 ```
-npm run play
+bad-apple
 ```
