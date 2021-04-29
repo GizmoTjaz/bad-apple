@@ -14,7 +14,7 @@ function askForVideoURL (callback: (url: string) => void) {
 		output: process.stdout
 	});
 
-	rl.question("Enter YouTube video URL: ", (url: string) => {
+	rl.question("Enter Bad Apple's YouTube video URL: ", (url: string) => {
 		if (url) {
 			callback(url)
 		} else {
