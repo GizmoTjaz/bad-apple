@@ -27,7 +27,7 @@ export default async function (frame: RawFrame): Promise<DrawnFrame> {
 			const pixelOffset = (y * 3) * IMAGE_WIDTH + (x * 3);
 
 			// Get color average from RGB channels and determine which character to represent it with
-			drawnFrame += IMAGE_DATA[pixelOffset] >= 220
+			drawnFrame += IMAGE_DATA[pixelOffset] >= 240
 				? "#"
 				: ".";
 
