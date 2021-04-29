@@ -18,13 +18,7 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 
 	// Fix missing directories
 	if (!fs.existsSync(TEMP_PATH)) fs.mkdirSync(TEMP_PATH);
-	if (!fs.existsSync(VIDEO_PATH)) {
-		await downloadVideo();
-	}
-
-	for (let i = 0; i < 36; i++) {
-		process.stdout.write("\n");
-	}
+	if (!fs.existsSync(VIDEO_PATH)) await downloadVideo();
 
 	if (cluster.isMaster) {
 
@@ -44,7 +38,7 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 		});
 
 		function unpackPacket (packet: Packet) {
-			packet.forEach((frame: DrawnFrame, index) => {
+			packet.forEach((frame: DrawnFrame, index: number) => {
 				setTimeout(() => {
 					paintFrame(frame);
 					if (index === (packet.length - 1)) fetchNewPacket();
@@ -74,8 +68,9 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 		let rawFrameQueue: RawFrame[] = [];
 
 		setInterval(async () => {
-			if (rawFrameQueue.length > 10) {
+			if (rawFrameQueue.length >= 10) {
 
+				// Get first 10 raw frames
 				const rawPacketFrames = rawFrameQueue.slice(0, 10);
 				rawFrameQueue = rawFrameQueue.slice(10);
 
@@ -85,16 +80,12 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 					framePacket[packetFrameIndex] = await drawFrame(rawPacketFrames[packetFrameIndex]);
 				}}
 
-				if (process) {
-					process.send!({ type: "packet", data: framePacket });
-				}
+				process.send!({ type: "packet", data: framePacket });
 			}
 		}, FRAME_PERIOD);
 
 		frameExtractor(VIDEO_PATH, (frame: RawFrame) => {
 			rawFrameQueue.push(frame);
-		}).then(() => {
-			process.exit(0);
 		}).catch(err => {
 			throw err;
 		});
