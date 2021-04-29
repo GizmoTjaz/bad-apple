@@ -16,6 +16,9 @@ import downloadVideo from "@components/download_video";
 // Types
 import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types";
 
+// Variables
+let extractorFinished = false;
+
 (async () => {
 
 	// Fix missing directories
@@ -57,7 +60,11 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 				unpackPacket(framePacket);
 			} else {
 				setTimeout(() => {
-					fetchNewPacket();
+					if (framePackets.length === 0 && extractorFinished) {
+						process.exit(0);
+					} else {
+						fetchNewPacket();
+					}
 				}, FRAME_PERIOD);
 			}
 
@@ -88,6 +95,8 @@ import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types"
 
 		frameExtractor(VIDEO_PATH, (frame: RawFrame) => {
 			rawFrameQueue.push(frame);
+		}).then(() => {
+			extractorFinished = true;
 		}).catch(err => {
 			throw err;
 		});
