@@ -5,9 +5,10 @@
         "rootDir": "./src",
         "target": "ES2015",
         "strict": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "esModuleInterop": true,
 		"baseUrl": "src",
+		"alwaysStrict": true,
 		"paths": {
 			"@/*": ["/*"],
 			"@utils/*": ["utils/*"],
