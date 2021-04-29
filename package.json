@@ -2,10 +2,14 @@
   "name": "bad-apple",
   "version": "1.0.0",
   "description": "Because why not?",
-  "main": "build/index.js",
+  "main": "./build/index.js",
+  "preferGlobal": true,
   "scripts": {
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./build",
-    "start": "node build/index.js"
+    "start": "node ./build/index.js"
+  },
+  "bin": {
+	"bad-apple": "./build/index.js"
   },
   "repository": {
     "type": "git",

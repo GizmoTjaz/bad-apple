@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Modules
 import fs from "fs";
 import cluster from "cluster";
