@@ -30,5 +30,10 @@
   "dependencies": {
     "sharp": "^0.28.1",
     "ytdl-core": "^4.5.0"
-  }
+  },
+  "keywords": [
+	  "bad-apple",
+	  "badapple",
+	  "fun"
+  ]
 }
