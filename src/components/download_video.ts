@@ -1,5 +1,5 @@
 // Modules
-import fs, { read } from "fs";
+import fs from "fs";
 import ytdl from "ytdl-core";
 import readline from "readline";
 
@@ -7,7 +7,7 @@ import readline from "readline";
 import { VIDEO_PATH } from "@utils/constants";
 import loadingBuffer from "@utils/loading_buffer";
 
-function askForVideoURL (callback: (string) => void) {
+function askForVideoURL (callback: (url: string) => void) {
 
 	const rl = readline.createInterface({
 		input: process.stdin,
