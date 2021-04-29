@@ -3,7 +3,6 @@ import { spawn } from "child_process";
 
 // Types
 import { RawFrame } from "@typings/types";
-
 type ErrCallback = Error | number;
 
 export default function (videoPath: string, frameCallback: (frame: RawFrame) => void): Promise<void> {
