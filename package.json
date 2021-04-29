@@ -9,7 +9,7 @@
     "start": "node ./build/index.js"
   },
   "bin": {
-	"bad-apple": "./build/index.js"
+    "bad-apple": "./build/index.js"
   },
   "repository": {
     "type": "git",
