@@ -1,6 +1,6 @@
 {
   "name": "bad-apple",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Because why not?",
   "main": "./build/index.js",
   "preferGlobal": true,
