@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Bad Apple</h1>
-Plays Bad Apple inside your terminal, because why not?
+Plays Bad Apple inside your terminal, because why not? This time it is not pre-rendered like most other versions.
 <br></br>
 
 # Prerequisites
@@ -11,12 +11,13 @@ You must have FFmpeg installed and have it set in your path.
 
 # Getting Started
 
-Make sure to globally install the module
+Make sure to **globally** install the module
 ```
 npm i -g bad-apple
 ```
 
-After it is installed, play it with one command. You will be prompted to download the video if this is your first time.
+After it is installed, you can play it with one simple command from anywhere:
 ```
 bad-apple
 ```
+If this is your first time running the command, you will be prompted to download the video first.
