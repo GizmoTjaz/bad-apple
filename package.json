@@ -22,8 +22,12 @@
   },
   "homepage": "https://github.com/GizmoTjaz/bad-apple#readme",
   "devDependencies": {
+    "@gizmo-dev/eslint-config": "^1.0.21",
     "@types/node": "^14.14.37",
     "@types/sharp": "^0.28.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
     "tscpaths": "0.0.9",
     "typescript": "^4.2.3"
   },
@@ -32,8 +36,8 @@
     "ytdl-core": "^4.5.0"
   },
   "keywords": [
-	  "bad-apple",
-	  "badapple",
-	  "fun"
+    "bad-apple",
+    "badapple",
+    "fun"
   ]
 }

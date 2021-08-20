@@ -1,0 +1,3 @@
+{
+	"extends": "@gizmo-dev/eslint-config"
+}
