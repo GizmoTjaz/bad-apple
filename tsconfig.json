@@ -14,6 +14,9 @@
 			"@utils/*": ["utils/*"],
 			"@typings/*": ["typings/*"],
 			"@components/*": ["components/*"]
-		}
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths" },
+		]
     }
 }
