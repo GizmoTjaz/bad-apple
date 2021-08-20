@@ -1,7 +1,7 @@
 // Types
 import { DrawnFrame } from "@typings/types";
 
-export default function (drawnFrame: DrawnFrame) {
+export default function (drawnFrame: DrawnFrame): void {
 
 	//process.stdout.cursorTo(0);
 	

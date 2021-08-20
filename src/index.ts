@@ -30,7 +30,7 @@ let extractorFinished = false;
 		const worker = cluster.fork();
 		const framePackets: Packet[] = [];
 
-		worker.on("message", ({ type, data }: { type: WorkerMessageType, data: string | Packet }) => {
+		worker.on("message", ({ type, data }: { type: WorkerMessageType; data: string | Packet }) => {
 			switch (type) {
 				case "message":
 					console.log(data);
@@ -42,19 +42,24 @@ let extractorFinished = false;
 			}
 		});
 
-		function unpackPacket (packet: Packet) {
-			packet.forEach((frame: DrawnFrame, index: number) => {
-				setTimeout(() => {
-					paintFrame(frame);
-					if (index === (packet.length - 1)) fetchNewPacket();
-				}, index * FRAME_PERIOD);
-			});
-		}
+		const unpackPacket = (packet: Packet): void => {
+			for (let i = 0; i <= packet.length; i++) {
 
-		function fetchNewPacket () {
+				const frame = packet[i];
 
+				if (frame) {
+					setTimeout(() => {
+						paintFrame(frame);
+						if (i === (packet.length - 1)) fetchNewPacket();
+					}, i * FRAME_PERIOD);
+				}
+			}
+		};
+		
+		const fetchNewPacket = (): void => {
+		
 			const framePacket: Packet = framePackets[0];
-
+		
 			if (framePacket) {
 				framePackets.shift();
 				unpackPacket(framePacket);
@@ -67,8 +72,8 @@ let extractorFinished = false;
 					}
 				}, FRAME_PERIOD);
 			}
-
-		}
+		
+		};
 
 		fetchNewPacket();
 
@@ -77,19 +82,25 @@ let extractorFinished = false;
 		let rawFrameQueue: RawFrame[] = [];
 
 		setInterval(async () => {
-			if (rawFrameQueue.length >= 10) {
+			if (rawFrameQueue.length >= 10 && process.send) {
 
 				// Get first 10 raw frames
-				const rawPacketFrames = rawFrameQueue.slice(0, 10);
 				rawFrameQueue = rawFrameQueue.slice(10);
 
-				const framePacket = new Array(rawPacketFrames.length);
+				const framePacket: Promise<DrawnFrame>[] = [];
 
-				for await (const [ packetFrameIndex ] of framePacket.entries()) {{
-					framePacket[packetFrameIndex] = await drawFrame(rawPacketFrames[packetFrameIndex]);
-				}}
+				for (let i = 0; i <= rawFrameQueue.length; i++) {
 
-				process.send!({ type: "packet", data: framePacket });
+					const rawFrame = rawFrameQueue[i];
+
+					if (rawFrame) {
+						framePacket.push(drawFrame(rawFrame));
+					}
+				}
+
+				await Promise.all(framePacket);
+
+				process.send({ type: "packet", data: framePacket });
 			}
 		}, FRAME_PERIOD);
 
