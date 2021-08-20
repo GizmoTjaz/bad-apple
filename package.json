@@ -5,6 +5,7 @@
   "main": "./build/index.js",
   "preferGlobal": true,
   "scripts": {
+	"lint": "eslint src",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./build",
     "start": "node ./build/index.js"
   },
