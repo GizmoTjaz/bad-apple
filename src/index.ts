@@ -79,28 +79,30 @@ let extractorFinished = false;
 
 	} else {
 
-		let rawFrameQueue: RawFrame[] = [];
+		const rawFrameQueue: RawFrame[] = [];
 
 		setInterval(async () => {
 			if (rawFrameQueue.length >= 10 && process.send) {
 
+				
 				// Get first 10 raw frames
-				rawFrameQueue = rawFrameQueue.slice(10);
+				const
+					_rawFrameQueue = rawFrameQueue.splice(0, 10),
+					framePacketPromise: Promise<DrawnFrame>[] = [];
 
-				const framePacket: Promise<DrawnFrame>[] = [];
+				for (let i = 0; i <= _rawFrameQueue.length; i++) {
 
-				for (let i = 0; i <= rawFrameQueue.length; i++) {
-
-					const rawFrame = rawFrameQueue[i];
+					const rawFrame = _rawFrameQueue[i];
 
 					if (rawFrame) {
-						framePacket.push(drawFrame(rawFrame));
+						framePacketPromise.push(drawFrame(rawFrame));
 					}
 				}
 
-				await Promise.all(framePacket);
-
-				process.send({ type: "packet", data: framePacket });
+				process.send({
+					type: "packet",
+					data: await Promise.all(framePacketPromise)
+				});
 			}
 		}, FRAME_PERIOD);
 
