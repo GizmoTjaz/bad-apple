@@ -16,6 +16,9 @@
   "engines": {
 	"node": "14.x"
   },
+  "files": [
+	"build/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GizmoTjaz/bad-apple.git"
