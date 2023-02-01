@@ -1,7 +1,7 @@
 {
   "name": "bad-apple",
   "version": "1.0.4",
-  "description": "Bad Apple player inside your terminal.",
+  "description": "Play Bad Apple inside your terminal",
   "main": "./build/index.js",
   "preferGlobal": true,
   "scripts": {
