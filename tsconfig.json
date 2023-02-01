@@ -1,17 +1,15 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "outDir": "./build",
-        "rootDir": "./src",
         "target": "ES2019",
+		"moduleResolution": "node",
+        "outDir": "./build",
+		"baseUrl": "./src",
         "strict": true,
         "noImplicitAny": true,
         "esModuleInterop": true,
-		"baseUrl": "src",
 		"alwaysStrict": true,
-		"moduleResolution": "node",
 		"paths": {
-			"@/*": ["/*"],
 			"@utils/*": ["utils/*"],
 			"@typings/*": ["typings/*"],
 			"@components/*": ["components/*"]
