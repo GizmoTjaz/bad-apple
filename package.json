@@ -5,7 +5,7 @@
   "main": "./build/index.js",
   "preferGlobal": true,
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint ./src",
     "prepare": "ts-patch install -s",
     "build": "tsc",
     "start": "node ./build/index.js"
