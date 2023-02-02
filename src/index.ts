@@ -14,7 +14,7 @@ import drawFrame from "@components/draw_frame";
 import downloadVideo from "@components/download_video";
 
 // Types
-import { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types";
+import type { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types";
 
 // Variables
 let extractorFinished = false;
