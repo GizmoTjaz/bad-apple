@@ -2,9 +2,9 @@
 import sharp from "sharp";
 
 // Types
-import { DrawnFrame, RawFrame } from "@typings/types";
+import type { Frame, RawFrame } from "@typings/types";
 
-export default async function (frame: RawFrame): Promise<DrawnFrame> {
+export default async function (frame: RawFrame): Promise<Frame> {
 
 	const
 		image = sharp(frame, { sequentialRead: true }).raw(),
