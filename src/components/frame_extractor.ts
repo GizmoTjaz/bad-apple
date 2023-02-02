@@ -2,33 +2,35 @@
 import { spawn } from "child_process";
 
 // Types
-import { RawFrame } from "@typings/types";
-type ErrCallback = Error | number;
+import type { RawFrame } from "@typings/types";
 
-export default function (videoPath: string, frameCallback: (frame: RawFrame) => void): Promise<void> {
-	return new Promise((res: () => void, rej: (err: ErrCallback) => void) => {
+export default function (videoPath: string, frameCallback: (frame: RawFrame) => void): void {
 
-		const ffmpegProcess = spawn("ffmpeg", [
-			"-i", videoPath,
-			"-preset", "ultrafast",
-			"-tune", "fastdecode",
-			"-s", "48x36",
-			"-c:v", "png",
-			"-f", "image2pipe",
-			"-"
-		], {
-			shell: true
-		});
-	
-		ffmpegProcess.stdin.on("error", rej);
-		ffmpegProcess.stdout.on("error", rej);
-		ffmpegProcess.stdout.on("data", frameCallback);
-	
-		ffmpegProcess.on("close", (exitCode: number) => {
-			exitCode === 0
-				? res()
-				: rej(exitCode);
-		});
+	const ffmpegProcess = spawn("ffmpeg", [
+		"-i", videoPath,
+		"-preset", "ultrafast",
+		"-tune", "fastdecode",
+		"-s", "48x36",
+		"-c:v", "png",
+		"-f", "image2pipe",
+		"-"
+	], {
+		shell: true
+	});
 
+	const errorHandler = (data: unknown): void => {
+		throw new Error(`FFmpeg quit unexpectedly: ${data}`);
+	};
+
+	ffmpegProcess.stdin.on("error", errorHandler);
+	ffmpegProcess.stdout.on("error", errorHandler);
+	ffmpegProcess.stdout.on("data", frameCallback);
+
+	ffmpegProcess.on("close", (exitCode: number) => {
+		if (exitCode === 0) {
+			frameCallback(Buffer.from("END_FRAME"));
+		} else {
+			errorHandler(exitCode);
+		}
 	});
 }

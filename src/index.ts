@@ -4,31 +4,34 @@
 import fs from "fs";
 import cluster from "cluster";
 
-// Utils
-import { FRAME_PERIOD, TEMP_PATH, VIDEO_PATH } from "@utils/constants";
-
 // Components
 import frameExtractor from "@components/frame_extractor";
 import paintFrame from "@components/paint_frame";
 import drawFrame from "@components/draw_frame";
 import downloadVideo from "@components/download_video";
 
+// Utils
+import { FRAME_PERIOD, TEMP_PATH, VIDEO_PATH } from "@utils/constants";
+
 // Types
-import type { WorkerMessageType, Packet, DrawnFrame, RawFrame } from "@typings/types";
+import type { WorkerMessageType, Packet, Frame, RawFrame } from "@typings/types";
 
 // Variables
-let extractorFinished = false;
+let END_SIGNAL = false;
 
 (async () => {
 
-	// Fix missing directories
-	if (!fs.existsSync(TEMP_PATH)) fs.mkdirSync(TEMP_PATH);
-	if (!fs.existsSync(VIDEO_PATH)) await downloadVideo();
+	if (!fs.existsSync(TEMP_PATH))
+		fs.mkdirSync(TEMP_PATH);
+
+	if (!fs.existsSync(VIDEO_PATH))
+		await downloadVideo();
 
 	if (cluster.isMaster) {
 
-		const worker = cluster.fork();
-		const framePackets: Packet[] = [];
+		const
+			worker = cluster.fork(),
+			frames: Frame[] = [];
 
 		worker.on("message", ({ type, data }: { type: WorkerMessageType; data: string | Packet }) => {
 			switch (type) {
@@ -36,82 +39,61 @@ let extractorFinished = false;
 					console.log(data);
 					break;
 				case "packet":
-					framePackets.push(data as Packet);
+					for (let i = 0; i < (data as Packet).length; i++) {
+						if ((data as Packet)[i]) {
+							frames.push((data as Packet)[i]);
+						}
+					}
 					break;
 				default:
 			}
 		});
 
-		const unpackPacket = (packet: Packet): void => {
-			for (let i = 0; i <= packet.length; i++) {
+		const frameFethcer = setInterval(() => {
 
-				const frame = packet[i];
-
-				if (frame) {
-					setTimeout(() => {
-						paintFrame(frame);
-						if (i === (packet.length - 1)) fetchNewPacket();
-					}, i * FRAME_PERIOD);
-				}
+			const frame = frames.shift();
+			
+			if (frame) {
+				paintFrame(frame);
+			} else if (END_SIGNAL) {
+				clearInterval(frameFethcer);
+				process.exit(0);
 			}
-		};
-		
-		const fetchNewPacket = (): void => {
-		
-			const framePacket: Packet = framePackets[0];
-		
-			if (framePacket) {
-				framePackets.shift();
-				unpackPacket(framePacket);
-			} else {
-				setTimeout(() => {
-					if (framePackets.length === 0 && extractorFinished) {
-						process.exit(0);
-					} else {
-						fetchNewPacket();
-					}
-				}, FRAME_PERIOD);
-			}
-		
-		};
 
-		fetchNewPacket();
+		}, FRAME_PERIOD);
 
 	} else {
 
 		const rawFrameQueue: RawFrame[] = [];
 
-		setInterval(async () => {
-			if (rawFrameQueue.length >= 10 && process.send) {
+		const frameFetcher = setInterval(async () => {
+			if ((rawFrameQueue.length >= 10 || END_SIGNAL) && process.send) {
 
-				
-				// Get first 10 raw frames
+				if (rawFrameQueue.length <= 10 && END_SIGNAL) {
+					clearInterval(frameFetcher);
+				}
+
 				const
-					_rawFrameQueue = rawFrameQueue.splice(0, 10),
-					framePacketPromise: Promise<DrawnFrame>[] = [];
+					framesToDraw = rawFrameQueue.splice(0, 10),
+					drawnFramePromise: Promise<Frame>[] = [];
 
-				for (let i = 0; i <= _rawFrameQueue.length; i++) {
-
-					const rawFrame = _rawFrameQueue[i];
-
-					if (rawFrame) {
-						framePacketPromise.push(drawFrame(rawFrame));
-					}
+				for (let i = 0; i < framesToDraw.length; i++) {
+					drawnFramePromise.push(drawFrame(framesToDraw[i]));
 				}
 
 				process.send({
 					type: "packet",
-					data: await Promise.all(framePacketPromise)
+					data: await Promise.all(drawnFramePromise)
 				});
 			}
 		}, FRAME_PERIOD);
 
-		frameExtractor(VIDEO_PATH, (frame: RawFrame) => {
-			rawFrameQueue.push(frame);
-		}).then(() => {
-			extractorFinished = true;
-		}).catch(err => {
-			throw err;
+		frameExtractor(VIDEO_PATH, (rawFrame: RawFrame) => {
+			if (rawFrame.length === 9 && rawFrame.toString() === "END_FRAME") {
+				END_SIGNAL = true;
+			} else {
+				rawFrameQueue.push(rawFrame);
+			}
 		});
 
 	}

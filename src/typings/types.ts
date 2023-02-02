@@ -1,11 +1,11 @@
-export interface DrawnFrame {
+export type RawFrame = Buffer;
+
+export interface Frame {
 	width: number;
 	height: number;
 	data: string;
 }
 
-export type RawFrame = Buffer;
-
-export type Packet = DrawnFrame[];
+export type Packet = Frame[];
 
 export type WorkerMessageType = "message" | "packet";
