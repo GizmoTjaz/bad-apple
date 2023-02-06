@@ -8,6 +8,7 @@ export default function (videoPath: string, frameCallback: (frame: RawFrame) => 
 
 	const ffmpegProcess = spawn("ffmpeg", [
 		"-i", videoPath,
+		"-movflags", "+faststart",
 		"-preset", "ultrafast",
 		"-tune", "fastdecode",
 		"-s", "48x36",
