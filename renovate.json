@@ -4,6 +4,6 @@
     "config:base"
   ],
   "schedule": [
-    "at 12:00 PM"
+    "before 10:00 AM"
   ]
 }
